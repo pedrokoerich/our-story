@@ -6,7 +6,6 @@ import image3 from '../style/assets/image3.jpg';
 import image4 from '../style/assets/image4.jpg';
 import image5 from '../style/assets/image5.jpg';
 
-
 const LovePage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -21,7 +20,7 @@ const LovePage = () => {
     minutes: 0,
     seconds: 0
   });
- 
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (audioRef.current.paused) {
@@ -41,34 +40,44 @@ const LovePage = () => {
     }
   };
 
-  const startDate = new Date('2024-09-07T22:00:00');
-  const images = [
-    image1,
-    image2,
-    image3,
-    image4,
-    image5
-  ];
+  const startDate = new Date('2024-09-07T22:00:00-03:00');
+  const images = [image1, image2, image3, image4, image5];
 
   const calculateTime = () => {
     const now = new Date();
-    const difference = now.getTime() - startDate.getTime();
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+    let hours = now.getHours() - startDate.getHours();
+    let minutes = now.getMinutes() - startDate.getMinutes();
+    let seconds = now.getSeconds() - startDate.getSeconds();
 
-    const seconds = Math.floor(difference / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30.44);
-    const years = Math.floor(months / 12);
+    // Ajuste para valores negativos
+    if (seconds < 0) {
+      seconds += 60;
+      minutes -= 1;
+    }
+    if (minutes < 0) {
+      minutes += 60;
+      hours -= 1;
+    }
+    if (hours < 0) {
+      hours += 24;
+      days -= 1;
+    }
+    if (days < 0) {
+      // Subtrai um mês
+      months -= 1;
+      // Calcula os dias no mês anterior
+      const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += previousMonth.getDate();
+    }
+    if (months < 0) {
+      months += 12;
+      years -= 1;
+    }
 
-    setTimeElapsed({
-      years,
-      months: months % 12,
-      days: days % 30,
-      hours: hours % 24,
-      minutes: minutes % 60,
-      seconds: seconds % 60
-    });
+    setTimeElapsed({ years, months, days, hours, minutes, seconds });
   };
 
   useEffect(() => {
@@ -112,9 +121,9 @@ const LovePage = () => {
           <Moon className="w-6 h-6 text-gray-600" />
         )}
       </button>
-          
+
       <div className={`fixed bottom-4 right-4 flex items-center gap-2 p-2 rounded-full backdrop-blur-sm z-50 transition-colors duration-300 ${
-        isDarkMode ? 'bg-gray-800/80' : 'bg-white/80'
+          isDarkMode ? 'bg-gray-800/80' : 'bg-white/80'
       }`}>
         <button
           onClick={togglePlay}
