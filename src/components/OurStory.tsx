@@ -229,7 +229,7 @@ const LovePage = () => {
         <h2 className={`text-2xl font-semibold text-center mb-6 transition-colors duration-300 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-800'
         }`}>
-          Tempo Juntos <Heart className="inline-block w-6 h-6 text-red-500" />
+          Tempo de Namoro <Heart className="inline-block w-6 h-6 text-red-500" />
         </h2>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4 text-center">
           {[
